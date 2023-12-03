@@ -22,7 +22,8 @@ for file in os.listdir():
     if file.endswith(".mp4"):
         filename = os.path.splitext(file)[0]
         print(filename)
-        ffmpeg.input(file).output(f"{filename}.mp3").run()
+        # mp3 is double the length of mp4 so fix that
+        ffmpeg.input(file).output(f"{filename}.mp3", acodec='libmp3lame', ac=2, ar='44100', ab='192k').run()
         os.remove(file)
         
 
