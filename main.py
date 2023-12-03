@@ -26,6 +26,7 @@ for file in os.listdir():
         os.remove(file)
         
 
+#add tags to mp3 files
 for file in os.listdir():
     if file.endswith(".mp3"):
         # add artist and album tags
