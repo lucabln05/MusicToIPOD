@@ -14,7 +14,7 @@ print('Number of videos in playlist: %s' % len(p.video_urls))
 for video in p.videos:
     title = video.title
     print(f"{title}.mp4")
-    #only audio 
+    #only audio
     video.streams.filter(only_audio=True).first().download()
 
 # convert every mp4 file to mp3
