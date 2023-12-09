@@ -32,15 +32,18 @@ def download_playlist(path, playlist_url, resolution, format='mp4'):
                 yt.streams.get_highest_resolution().download(path)
             else:
                 yt.streams.get_lowest_resolution().download(path)
-def convert_mp3(path):
+def convert_mp3(path, quality='320k'):
     # convert every mp4 file to mp3
     for file in os.listdir(path):
         if file.endswith(".mp4"):
             file = os.path.join(path, file)
             filename = os.path.splitext(file)[0]
-            print(filename)
-            # mp3 is double the length of mp4 so fix that
-            ffmpeg.input(file).output(f"{filename}.mp3", acodec='libmp3lame', ac=2, ar='44100', ab='320k').run()
+            if quality == '320k':
+                # convert to 320k mp3
+                ffmpeg.input(file).output(f"{filename}.mp3", acodec='libmp3lame', ac=2, ar='44100', ab='320k').run()
+            else:
+                # convert to 128k mp3
+                ffmpeg.input(file).output(f"{filename}.mp3", acodec='libmp3lame', ac=2, ar='44100', ab='128k').run()
             os.remove(file)
             
 def tag_mp3(path, artist, album, genre):

@@ -15,12 +15,14 @@ class App(customtkinter.CTk):
         def mp3_check():
             if mp3_var.get() == 'mp3':
                 tag_checkbox.configure(state='normal')
+                quality.configure(state='normal')
                 res.configure(state='disabled')
             else:
                 tag_checkbox.configure(state='disabled')
                 artist_entry.configure(state='disabled')
                 album_entry.configure(state='disabled')
                 genre_entry.configure(state='disabled')
+                quality.configure(state='disabled')
                 tag_var.set('off')
 
         def tag_check():
@@ -28,10 +30,12 @@ class App(customtkinter.CTk):
                 artist_entry.configure(state='normal')
                 album_entry.configure(state='normal')
                 genre_entry.configure(state='normal')
+
             else:
                 artist_entry.configure(state='disabled')
                 album_entry.configure(state='disabled')
                 genre_entry.configure(state='disabled')
+
 
         def change_folder():
             global folder
@@ -39,14 +43,10 @@ class App(customtkinter.CTk):
 
         def download(): 
             if folder == '':
-                return
+                change_folder()
             download_playlist(folder, entry.get(), res.get(), mp3_var.get())
-            if tag_var.get() == 'on' and mp3_var.get() == 'mp4':
-                convert_mp3(folder)
-                tag_mp3(folder, artist_entry.get(), album_entry.get(), genre_entry.get())
-                return
             if mp3_var.get() == 'mp3':
-                convert_mp3(folder)
+                convert_mp3(folder, quality.get())
             if tag_var.get() == 'on':
                 tag_mp3(folder, artist_entry.get(), album_entry.get(), genre_entry.get())
 
@@ -79,9 +79,14 @@ class App(customtkinter.CTk):
         album_entry.grid(row=4, column=1, padx=10, pady=10, sticky="ew")
         genre_entry = customtkinter.CTkEntry(self, placeholder_text="Genre")
         genre_entry.grid(row=5, column=1, padx=10, pady=10, sticky="ew")
+        quality = customtkinter.CTkComboBox(self, values=["128k", "320k"])
+        quality.grid(row=6, column=1, padx=10, pady=10, sticky="ew")
+        quality.set("320k")
+
         artist_entry.configure(state='disabled')
         album_entry.configure(state='disabled')
         genre_entry.configure(state='disabled')
+        quality.configure(state='disabled')
         res = customtkinter.CTkComboBox(self, values=["High Res", "Low Res"])
         res.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
         res.set("Low Res")
