@@ -1,12 +1,35 @@
 
+import webbrowser
 import customtkinter
 from tkinter import filedialog
 from downloader import *
-import time
 
 #initialisierung
 global folder
 folder = ''
+
+
+class disclaimer(customtkinter.CTkToplevel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        def accept():
+            self.destroy()
+
+        self.title("Disclaimer")
+        self.geometry("350x150")
+        self.resizable(False, False)
+        self.grid_columnconfigure(0, weight=1)
+
+        # first row youtube link and download button
+        text = customtkinter.CTkLabel(self, text='This program is for educational purposes only. \n'
+                                                 'It is not intended to be used for piracy. \n'
+                                                 'The developer is not responsible for any misuse of this program.')
+        text.grid(row=0, column=0, padx=20, pady=20, sticky="ew", columnspan=2)
+        accept_button = customtkinter.CTkButton(self, text='Accept', command=accept)
+        accept_button.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+
+
 
 
 class App(customtkinter.CTk):
@@ -42,14 +65,24 @@ class App(customtkinter.CTk):
             global folder
             folder = filedialog.askdirectory()
 
-        def download(): 
+        def disclaimer_window():
+            #open disclaimer window in front of main window
+            disclaimer_window = disclaimer(self)
+            disclaimer_window.attributes('-topmost', True)
+            disclaimer_window.grab_set()
+            self.wait_window(disclaimer_window)
+
+
+        def download():
+            disclaimer_window()
+
             feedback.configure(text='Downloading...')
             if folder == '':
                 change_folder()
             if download_playlist(folder, entry.get(), res.get(), mp3_var.get()):
                 feedback.configure(text='Download finished')
             else:
-                feedback.configure(text='Download failed - check internet connection')
+                feedback.configure(text='Download failed')
                 return
             if mp3_var.get() == 'mp3':
                 feedback.configure(text='Converting to mp3...')
@@ -74,10 +107,11 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(0, weight=1)
 
         # first row youtube link and download button
-        entry = customtkinter.CTkEntry(self, placeholder_text="Playlist URL")
+        entry = customtkinter.CTkEntry(self, placeholder_text="Youtube URL")
         entry.grid(row=0, column=0, padx=20, pady=20, sticky="ew", columnspan=2)
         download_button = customtkinter.CTkButton(self, text='Download', command=download)
         download_button.grid(row=0, column=3, padx=10, pady=10)
+    
 
         # second row mp3 checkbox and folder button
         mp3_var = customtkinter.StringVar(value='mp4')
@@ -113,6 +147,15 @@ class App(customtkinter.CTk):
         # user feedback
         feedback = customtkinter.CTkLabel(self, text='')
         feedback.grid(row=3, column=3, padx=20, pady=(10), sticky="w")
+
+
+        # bottom row github link and exit button
+        github_button = customtkinter.CTkButton(self, text='Github', command=lambda: webbrowser.open_new('github.com/lucabln05'))
+        github_button.grid(row=7, column=0, padx=10, pady=10)
+        exit_button = customtkinter.CTkButton(self, text='Exit', command=self.destroy)
+        exit_button.grid(row=7, column=3, padx=10, pady=10)
+
+
 
 
 app = App()
