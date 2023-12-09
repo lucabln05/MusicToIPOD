@@ -154,6 +154,10 @@ class App(customtkinter.CTk):
         github_button.grid(row=7, column=0, padx=10, pady=10)
         exit_button = customtkinter.CTkButton(self, text='Exit', command=self.destroy)
         exit_button.grid(row=7, column=3, padx=10, pady=10)
+        # version number
+        version = customtkinter.CTkLabel(self, text='v0.1')
+        version.grid(row=7, column=1, padx=10, pady=10, sticky="e")
+
 
 
 
