@@ -3,6 +3,7 @@ import webbrowser
 import customtkinter
 from tkinter import filedialog
 from downloader import *
+import threading
 
 #initialisierung
 global folder
@@ -74,33 +75,43 @@ class App(customtkinter.CTk):
             disclaimer_window.grab_set()
             self.wait_window(disclaimer_window)
 
-
         def download():
             disclaimer_window()
-
+            progressbar.grid(row=2, column=0, padx=10, pady=10, sticky="ew", columnspan=4)
+            progressbar.start()
             feedback.configure(text='Downloading...')
+
             if folder == '':
                 change_folder()
+
+            # Perform download in a separate thread
+            download_thread = threading.Thread(target=perform_download)
+            download_thread.daemon = True  # Daemonize the thread to avoid blocking GUI on exit
+            download_thread.start()
+
+        def perform_download():
             if download_playlist(folder, entry.get(), res.get(), mp3_var.get()):
                 feedback.configure(text='Download finished')
             else:
                 feedback.configure(text='Download failed')
-                return
+
             if mp3_var.get() == 'mp3':
                 feedback.configure(text='Converting to mp3...')
                 if convert_mp3(folder, quality.get()):
                     feedback.configure(text='Conversion finished')
                 else:
                     feedback.configure(text='Conversion failed - check if ffmpeg is installed')
-                    return
+
             if tag_var.get() == 'on':
                 feedback.configure(text='Tagging mp3...')
                 if tag_mp3(folder, artist_entry.get(), album_entry.get(), genre_entry.get()):
                     feedback.configure(text='Tagging finished')
                 else:
                     feedback.configure(text='Tagging failed')
-                    return
 
+            progressbar.stop()
+            progressbar.grid_remove()
+            
 
 
         self.title("MusicToIPOD - Youtube Downloader")
@@ -149,20 +160,24 @@ class App(customtkinter.CTk):
         # user feedback
         feedback = customtkinter.CTkLabel(self, text='')
         feedback.grid(row=3, column=3, padx=20, pady=(10), sticky="w")
-
-
+        # progressbar
+        progressbar = customtkinter.CTkProgressBar(self, orientation="horizontal")
+        progressbar.grid_remove()
+        
         # bottom row github link and exit button
         github_button = customtkinter.CTkButton(self, text='Github', command=lambda: webbrowser.open_new('github.com/lucabln05'))
-        github_button.grid(row=7, column=0, padx=10, pady=10)
+        github_button.grid(row=8, column=0, padx=10, pady=10)
         exit_button = customtkinter.CTkButton(self, text='Exit', command=self.destroy)
-        exit_button.grid(row=7, column=3, padx=10, pady=10)
+        exit_button.grid(row=8, column=3, padx=10, pady=10)
         # version number
         version = customtkinter.CTkLabel(self, text='v0.1')
-        version.grid(row=7, column=1, padx=10, pady=10, sticky="e")
+        version.grid(row=8, column=1, padx=10, pady=10, sticky="e")
 
 
 
 
+#start app with multiprocessing
+if __name__ == '__main__':
+    app = App()
+    app.mainloop()
 
-app = App()
-app.mainloop()
