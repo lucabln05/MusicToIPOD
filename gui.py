@@ -41,7 +41,9 @@ class App(customtkinter.CTk):
                 tag_checkbox.configure(state='normal')
                 quality.configure(state='normal')
                 res.configure(state='disabled')
+                
             else:
+                res.configure(state='normal')
                 tag_checkbox.configure(state='disabled')
                 artist_entry.configure(state='disabled')
                 album_entry.configure(state='disabled')
