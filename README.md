@@ -2,7 +2,7 @@ Description
 
 MusicToIPOD is a YouTube downloader that allows you to download songs, videos, and playlists to your computer. You can download the files in MP3 or MP4 format, and you can also tag the files with artist, album, and genre information.
 
-![Alt text](relative%20path/to/img/maingui.png?raw=true "Title")
+![Alt text](./img/maingui.png?raw=true)
 
 Features
 
