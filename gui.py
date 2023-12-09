@@ -33,6 +33,7 @@ class disclaimer(customtkinter.CTkToplevel):
 
 
 
+
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -90,7 +91,7 @@ class App(customtkinter.CTk):
             download_thread.start()
 
         def perform_download():
-            if download_playlist(folder, entry.get(), res.get(), mp3_var.get()):
+            if download_content(folder, entry.get(), res.get(), mp3_var.get()):
                 feedback.configure(text='Download finished')
             else:
                 feedback.configure(text='Download failed')
@@ -170,7 +171,7 @@ class App(customtkinter.CTk):
         exit_button = customtkinter.CTkButton(self, text='Exit', command=self.destroy)
         exit_button.grid(row=8, column=3, padx=10, pady=10)
         # version number
-        version = customtkinter.CTkLabel(self, text='v0.1')
+        version = customtkinter.CTkLabel(self, text='v0.2')
         version.grid(row=8, column=1, padx=10, pady=10, sticky="e")
 
 

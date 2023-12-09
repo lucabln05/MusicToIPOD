@@ -4,11 +4,11 @@ import os
 import music_tag
 
 
-def download_playlist(path, playlist_url, resolution, format='mp4'):
+def download_content(path, url, resolution, format='mp4'):
     try:
         #check if playlist or single video
-        if any(x in playlist_url for x in ['list=', 'playlist']):
-            p = Playlist(playlist_url)
+        if any(x in url for x in ['list=', 'playlist']):
+            p = Playlist(url)
             print(path)
             print('Number of videos in playlist: %s' % len(p.video_urls))
             for video in p.videos:
@@ -24,7 +24,7 @@ def download_playlist(path, playlist_url, resolution, format='mp4'):
                         video.streams.get_lowest_resolution().download(path)
         else:
             #download single video
-            yt = YouTube(playlist_url)
+            yt = YouTube(url)
             if format == 'mp3':
                 yt.streams.filter(only_audio=True).first().download(path)
             else:
@@ -35,7 +35,22 @@ def download_playlist(path, playlist_url, resolution, format='mp4'):
         return True
     except:
         return False
-    
+
+def get_video_title(url):
+    try:
+
+        if any(x in url for x in ['list=', 'playlist']):
+            p = Playlist(url)
+            videos = []
+            for video in p.videos:
+                videos.append(video.title)
+        else:
+            yt = YouTube(url)
+            videos = [yt.title]
+        return videos
+    except:
+        return False
+      
 def convert_mp3(path, quality='320k'):
     try:
         # convert every mp4 file to mp3
