@@ -6,15 +6,19 @@ MusicToIPOD is a YouTube downloader that allows you to download songs, videos, a
 
 Features
 
-Download songs, videos, and playlists from YouTube
-Choose between MP3 or MP4 format
-Tag files with artist, album, and genre information
-Support for multiple languages
+- Download songs, videos, and playlists from YouTube
+- Choose between MP3 or MP4 format
+- Tag files with artist, album, and genre information
+
 Usage
 
 To use MusicToIPOD, simply enter the YouTube URL of the song, video, or playlist you want to download. The program will then download the file to your computer.
 
-Disclaimer
+Additional Requirements
+
+To download files in MP3 format, you must have ffmpeg installed on your computer. ffmpeg is a free and open-source software that can be used to convert audio and video files. You can download ffmpeg from the ffmpeg website.
+
+!Disclaimer!
 
 This software is intended for educational and research purposes only. It is not intended for use in any commercial or illegal activities.
 
